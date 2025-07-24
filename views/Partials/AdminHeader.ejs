@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="/bingo-logo.png">
+    <style>
+        /* Admin Header Styles (scoped to header only) */
+        .AdminHeader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .AdminHeader-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1440px;
+            height: 100%;
+            padding: 0 20px;
+            margin: 0 auto;
+        }
+
+        /* Three Flex Children */
+        .AdminHeader-logoBox {
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .AdminHeader-linksBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1 1 auto;
+            padding: 0 20px;
+        }
+
+        .AdminHeader-logoutBox {
+            display: flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        /* Logo Styles */
+        .AdminHeader-logo {
+            color: #2b2d42;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+.AdminHeader-logoIcon {
+    color: #4cc9f0;
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, #4361ee, #4cc9f0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block; /* or block */
+}
+
+        /* Navigation Links */
+        .AdminHeader-navLinks {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .AdminHeader-navLink {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            color: #6c757d;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .AdminHeader-navLink:hover {
+            background-color: rgba(100, 108, 255, 0.1);
+            color: #4361ee;
+        }
+
+        .AdminHeader-navLink.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: #4361ee;
+            font-weight: 700;
+        }
+
+        .AdminHeader-navLinkIcon {
+            font-size: 1.1rem;
+        }
+
+        /* Logout Button */
+        .AdminHeader-logoutBtn {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .AdminHeader-logoutBtn:hover {
+            background: linear-gradient(135deg, #b5179e, #f72585);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Mobile Menu Toggle */
+        .AdminHeader-mobileToggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #2b2d42;
+            font-size: 1.6rem;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Mobile Dropdown Menu */
+        .AdminHeader-mobileMenu {
+            position: fixed;
+            top: 70px;
+            right: 0;
+            width: 280px;
+            background: white;
+            box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 0 10px;
+            padding: 15px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 999;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .AdminHeader-mobileMenu.show {
+            transform: translateX(0);
+        }
+
+        .AdminHeader-mobileLink {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 15px;
+            color: #6c757d;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .AdminHeader-mobileLink:hover {
+            background-color: rgba(100, 108, 255, 0.1);
+            color: #4361ee;
+        }
+
+        .AdminHeader-mobileLinkIcon {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .AdminHeader-linksBox {
+                display: none;
+            }
+
+            .AdminHeader-logoutBox .AdminHeader-logoutBtn {
+                display: none;
+            }
+
+            .AdminHeader-mobileToggle {
+                display: block;
+            }
+
+            .AdminHeader-container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .AdminHeader-logoText {
+                display: none;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .AdminHeader a:focus-visible,
+        .AdminHeader button:focus-visible {
+            outline: 2px solid #4361ee;
+            outline-offset: 2px;
+        }
+
+        /* Add margin to body to account for fixed header */
+        body {
+            padding-top: 70px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="AdminHeader" aria-label="Main navigation">
+        <div class="AdminHeader-container">
+            <!-- 1st Flex Child - Logo Box (Left) -->
+            <div class="AdminHeader-logoBox">
+                <a href="/" class="AdminHeader-logo" aria-label="Admin Panel Home">
+                    <i class="fas fa-user-shield AdminHeader-logoIcon" aria-hidden="true"></i>
+                    <span class="AdminHeader-logoText">Admin Panel</span>
+                </a>
+            </div>
+
+            <!-- 2nd Flex Child - Links Box (Middle) -->
+            <div class="AdminHeader-linksBox">
+                <nav class="AdminHeader-navLinks" aria-label="Secondary navigation">
+                    <a href="/signup/admin" class="AdminHeader-navLink">
+                        <i class="fas fa-user-plus AdminHeader-navLinkIcon" aria-hidden="true"></i>
+                        <span>SignUp Admin</span>
+                    </a>
+                    <a href="/signup/subadmin" class="AdminHeader-navLink">
+                        <i class="fas fa-users-cog AdminHeader-navLinkIcon" aria-hidden="true"></i>
+                        <span>SignUp Subadmin</span>
+                    </a>
+                    <a href="/admin/list" class="AdminHeader-navLink">
+                        <i class="fas fa-users AdminHeader-navLinkIcon" aria-hidden="true"></i>
+                        <span>Admin List</span>
+                    </a>
+                    <a href="/subadmin/list" class="AdminHeader-navLink">
+                        <i class="fas fa-user-tie AdminHeader-navLinkIcon" aria-hidden="true"></i>
+                        <span>SubAdmin List</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- 3rd Flex Child - Logout Box (Right) -->
+            <div class="AdminHeader-logoutBox">
+                <form action="/logout" method="POST" style="display: inline;">
+                    <button type="submit" class="AdminHeader-logoutBtn" aria-label="Logout">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
+
+                <button class="AdminHeader-mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div class="AdminHeader-mobileMenu">
+            <a href="/signup/admin" class="AdminHeader-mobileLink">
+                <i class="fas fa-user-plus AdminHeader-mobileLinkIcon" aria-hidden="true"></i>
+                <span>SignUp Admin</span>
+            </a>
+            <a href="/signup/subadmin" class="AdminHeader-mobileLink">
+                <i class="fas fa-users-cog AdminHeader-mobileLinkIcon" aria-hidden="true"></i>
+                <span>SignUp Subadmin</span>
+            </a>
+            <a href="/admin/list" class="AdminHeader-mobileLink">
+                <i class="fas fa-users AdminHeader-mobileLinkIcon" aria-hidden="true"></i>
+                <span>Admin List</span>
+            </a>
+            <a href="/subadmin/list" class="AdminHeader-mobileLink">
+                <i class="fas fa-user-tie AdminHeader-mobileLinkIcon" aria-hidden="true"></i>
+                <span>SubAdmin List</span>
+            </a>
+            <form action="/logout" method="POST" class="mobile-logout-form">
+                <button type="submit" class="AdminHeader-mobileLink">
+                    <i class="fas fa-sign-out-alt AdminHeader-mobileLinkIcon" aria-hidden="true"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.querySelector('.AdminHeader-mobileToggle');
+            const mobileMenu = document.querySelector('.AdminHeader-mobileMenu');
+
+            mobileMenuToggle.addEventListener('click', () => {
+                const isExpanded = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+                mobileMenuToggle.setAttribute('aria-expanded', !isExpanded);
+                mobileMenu.classList.toggle('show');
+            });
+
+            // Set active link based on current URL
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('.AdminHeader-navLink');
+            const mobileLinks = document.querySelectorAll('.AdminHeader-mobileLink');
+
+            function setActiveLinks() {
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                        link.setAttribute('aria-current', 'page');
+                    } else {
+                        link.classList.remove('active');
+                        link.removeAttribute('aria-current');
+                    }
+                });
+
+                mobileLinks.forEach(link => {
+                    if (link.getAttribute('href') === currentPath) {
+                        link.classList.add('active');
+                        link.setAttribute('aria-current', 'page');
+                    } else {
+                        link.classList.remove('active');
+                        link.removeAttribute('aria-current');
+                    }
+                });
+            }
+
+            setActiveLinks();
+
+            // Close mobile menu when clicking on a link
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.remove('show');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // Close menu when clicking outside (for mobile)
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.AdminHeader-mobileToggle') &&
+                    !e.target.closest('.AdminHeader-mobileMenu')) {
+                    mobileMenu.classList.remove('show');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 1200) {
+                    mobileMenu.classList.remove('show');
+                    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

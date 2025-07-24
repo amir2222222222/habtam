@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Signup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="icon" type="image/png" sizes="32x32" href="/bingo-logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Main content container will grow to fill remaining space */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            /* Account for fixed header */
+        }
+
+        .SignUpUser-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .SignUpUser-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #2b2d42;
+            font-weight: 600;
+        }
+
+        .SignUpUser-input-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .SignUpUser-input {
+            width: 100%;
+            padding: 0.75rem;
+            padding-right: 2.5rem;
+            border: 1px solid #e9ecef;
+            border-radius: 0.25rem;
+            font-size: 0.9375rem;
+            transition: all 0.2s ease;
+        }
+
+        .SignUpUser-input:focus {
+            outline: none;
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .SignUpUser-input.valid {
+            border-color: #2ecc71;
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .SignUpUser-input.invalid {
+            border-color: #f72585;
+            box-shadow: 0 0 0 3px rgba(247, 37, 133, 0.1);
+        }
+
+        .SignUpUser-password-toggle {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .SignUpUser-submit-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .SignUpUser-submit-btn:hover {
+            background-color: #3a56d4;
+        }
+
+        .SignUpUser-submit-btn:disabled {
+            background-color: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        .SignUpUser-response {
+            min-height: 3rem;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .SignUpUser-response.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .SignUpUser-error {
+            background-color: #fde8ef;
+            color: #f72585;
+            border-left: 3px solid #f72585;
+        }
+
+        .SignUpUser-success {
+            background-color: #e8f9f0;
+            color: #2ecc71;
+            border-left: 3px solid #2ecc71;
+        }
+
+        @media (max-width: 480px) {
+            .SignUpUser-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../Partials/AdminHeader') -%>
+
+        <div class="main-content">
+            <div class="SignUpUser-form">
+                <h1 class="SignUpUser-title">Create Admin</h1>
+
+                <div id="SignUpUser-response" class="SignUpUser-response">
+                    <span id="SignUpUser-response-text"></span>
+                </div>
+
+                <form id="SignUpUser-form">
+                    <!-- Name -->
+                    <div class="SignUpUser-input-group">
+                        <input type="text" id="SignUpUser-name" name="name" class="SignUpUser-input"
+                            placeholder="Name (min 8 chars, no special chars)" required>
+                    </div>
+
+                    <!-- Username -->
+                    <div class="SignUpUser-input-group">
+                        <input type="text" id="SignUpUser-username" name="username" class="SignUpUser-input"
+                            placeholder="Username (min 8 chars, no special chars)" required>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="SignUpUser-input-group">
+                        <input type="password" id="SignUpUser-password" name="password" class="SignUpUser-input"
+                            placeholder="Password (min 8 chars, uppercase, lowercase, number)" required>
+                        <button type="button" class="SignUpUser-password-toggle" id="SignUpUser-toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <button type="submit" class="SignUpUser-submit-btn" id="SignUpUser-submit-btn" disabled>
+                        Register Admin
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const form = document.getElementById('SignUpUser-form');
+                const responseBox = document.getElementById('SignUpUser-response');
+                const responseText = document.getElementById('SignUpUser-response-text');
+                const toggleBtn = document.getElementById('SignUpUser-toggle-password');
+                const passwordInput = document.getElementById('SignUpUser-password');
+                const submitBtn = document.getElementById('SignUpUser-submit-btn');
+                const nameInput = document.getElementById('SignUpUser-name');
+                const usernameInput = document.getElementById('SignUpUser-username');
+
+                // Password toggle
+                toggleBtn.addEventListener('click', () => {
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    toggleBtn.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+
+                // Validation functions
+                function containsSpecialChars(str) {
+                    return /[!@#$%^&*(),.?":{}|<>]/.test(str);
+                }
+
+                function validateName(name) {
+                    if (!name || name.trim().length < 8 || containsSpecialChars(name)) {
+                        return false;
+                    }
+                    return true;
+                }
+
+                function validateUsername(username) {
+                    if (!username || username.trim().length < 8 || containsSpecialChars(username)) {
+                        return false;
+                    }
+                    return true;
+                }
+
+                function validatePassword(password) {
+                    if (!password || password.length < 8 || containsSpecialChars(password)) {
+                        return false;
+                    }
+                    const hasUpper = /[A-Z]/.test(password);
+                    const hasLower = /[a-z]/.test(password);
+                    const hasNumber = /[0-9]/.test(password);
+                    return hasUpper && hasLower && hasNumber;
+                }
+
+                // Real-time validation
+                function validateAll() {
+                    const nameValid = validateName(nameInput.value);
+                    const usernameValid = validateUsername(usernameInput.value);
+                    const passwordValid = validatePassword(passwordInput.value);
+
+                    nameInput.classList.toggle('valid', nameValid && nameInput.value.length > 0);
+                    nameInput.classList.toggle('invalid', !nameValid && nameInput.value.length > 0);
+
+                    usernameInput.classList.toggle('valid', usernameValid && usernameInput.value.length > 0);
+                    usernameInput.classList.toggle('invalid', !usernameValid && usernameInput.value.length > 0);
+
+                    passwordInput.classList.toggle('valid', passwordValid && passwordInput.value.length > 0);
+                    passwordInput.classList.toggle('invalid', !passwordValid && passwordInput.value.length > 0);
+
+                    submitBtn.disabled = !(nameValid && usernameValid && passwordValid);
+                }
+
+                // Setup event listeners
+                [nameInput, usernameInput, passwordInput].forEach(input => {
+                    input.addEventListener('input', validateAll);
+                    input.addEventListener('focus', validateAll);
+                    input.addEventListener('blur', function () {
+                        if (this.value.length === 0) {
+                            this.classList.remove('valid', 'invalid');
+                        }
+                    });
+                });
+
+                // Form submission
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    submitBtn.disabled = true;
+
+                    // Clear previous response
+                    responseBox.classList.remove('show', 'SignUpUser-error', 'SignUpUser-success');
+
+                    try {
+                        const response = await fetch('/signup/admin', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: nameInput.value.trim(),
+                                username: usernameInput.value.trim(),
+                                password: passwordInput.value.trim()
+                            })
+                        });
+
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            // Handle backend validation errors
+                            if (result.errors && Array.isArray(result.errors)) {
+                                throw new Error(result.errors.join('\n'));
+                            }
+                            throw new Error(result.error || 'Failed to register admin');
+                        }
+
+                        // Show success
+                        responseBox.className = 'SignUpUser-response SignUpUser-success show';
+                        responseText.textContent = result.message || 'Admin account created successfully!';
+                        form.reset();
+
+                        // Reset validation states
+                        [nameInput, usernameInput, passwordInput].forEach(input => {
+                            input.classList.remove('valid', 'invalid');
+                        });
+
+                        // Hide success after 5 seconds
+                        setTimeout(() => {
+                            responseBox.classList.remove('show');
+                        }, 5000);
+                    } catch (err) {
+                        // Show error
+                        responseBox.className = 'SignUpUser-response SignUpUser-error show';
+                        responseText.innerHTML = err.message.split('\n').map(line =>
+                            `<div>${line}</div>`
+                        ).join('');
+
+                        // Hide error after 8 seconds
+                        setTimeout(() => {
+                            responseBox.classList.remove('show');
+                        }, 8000);
+                    } finally {
+                        validateAll(); // Re-enable button if validation passes
+                    }
+                });
+
+                // Initial validation check
+                validateAll();
+            });
+        </script>
+</body>
+
+</html>

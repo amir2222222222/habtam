@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/bingo-logo.png">
+  <title>User Profile</title>
+  <style>
+    :root {
+      --bg-color: #f5f7fa;
+      --text-color: #1e293b;
+      --primary-color: #3b82f6;
+      --secondary-color: #2563eb;
+      --button-color: #3b82f6;
+      --card-color: #ffffff;
+      --border-color: #e2e8f0;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --info-color: #0ea5e9;
+      --input-bg: #ffffff;
+      --input-text: #1e293b;
+      --disabled-color: #94a3b8;
+      --highlight-color: #e2e8f0;
+    }
+
+    .user-profile-reset {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .user-profile-html,
+    .user-profile-body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'MedievalSharp', cursive;
+    }
+
+    .user-profile-body {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      grid-template-columns: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .user-profile-main-container {
+      display: flex;
+      flex-direction: column;
+      border-radius: 10px;
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      margin: 20px;
+      background-color: var(--card-color);
+    }
+
+    .user-profile-header {
+      width: 100%;
+      padding: 20px;
+      background-color: var(--card-color);
+      color: var(--text-color);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .user-profile-avatar-container {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      background-color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .user-profile-avatar {
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .user-profile-info-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-profile-info-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      padding: 10px 15px;
+      background-color: var(--bg-color);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      min-width: 200px;
+    }
+
+    .user-profile-info-label {
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-right: 8px;
+    }
+
+    .user-profile-info-value {
+      color: var(--text-color);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    .user-profile-commission-container {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-profile-commission-item {
+      background-color: rgba(59, 130, 246, 0.1);
+      border-color: var(--primary-color);
+      padding: 10px 15px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .user-profile-commission-input {
+      width: 80px;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.9rem;
+      margin-right: 1px;
+    }
+
+    .user-profile-commission-input::-webkit-outer-spin-button,
+    .user-profile-commission-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .user-profile-commission-button {
+      padding: 8px 20px;
+      border-radius: 4px;
+      border: none;
+      margin-left: 10px;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .user-profile-commission-button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .user-profile-forms-container {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      padding: 15px;
+    }
+
+    @media (min-width: 768px) {
+      .user-profile-forms-container {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .user-profile-form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      min-height: min-content;
+    }
+
+    .user-profile-form {
+      background-color: var(--card-color);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: min-content;
+    }
+
+    .user-profile-form-title {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      color: var(--text-color);
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .user-profile-form-group {
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .user-profile-label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 0.9rem;
+      color: var(--text-color);
+    }
+
+    .user-profile-input {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: var(--input-text);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .user-profile-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
+
+    .user-profile-input.valid {
+      border-color: var(--success-color);
+    }
+
+    .user-profile-input.invalid {
+      border-color: var(--danger-color);
+    }
+
+    .user-profile-button {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: none;
+      background-color: var(--button-color);
+      color: white;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: auto;
+    }
+
+    .user-profile-button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .user-profile-button:disabled {
+      background-color: var(--disabled-color);
+      cursor: not-allowed;
+    }
+
+    .user-profile-password-container {
+      position: relative;
+    }
+
+    .user-profile-toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: var(--primary-color);
+      font-size: 1rem;
+      background: none;
+      border: none;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .user-profile-toggle-password:hover {
+      color: var(--secondary-color);
+    }
+
+    .user-profile-strength-meter {
+      height: 4px;
+      background-color: var(--bg-color);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .user-profile-strength-meter-fill {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+
+    .strength-0 {
+      background-color: var(--danger-color);
+      width: 20%;
+    }
+
+    .strength-1 {
+      background-color: var(--danger-color);
+      width: 40%;
+    }
+
+    .strength-2 {
+      background-color: var(--warning-color);
+      width: 60%;
+    }
+
+    .strength-3 {
+      background-color: var(--warning-color);
+      width: 80%;
+    }
+
+    .strength-4 {
+      background-color: var(--success-color);
+      width: 100%;
+    }
+
+    @media (max-width: 768px) {
+      .user-profile-main-container {
+        margin: 10px;
+      }
+
+      .user-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .user-profile-info-container {
+        width: 100%;
+        gap: 10px;
+      }
+
+      .user-profile-info-item {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .user-profile-commission-container {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .user-profile-avatar-container {
+        width: 60px;
+        height: 60px;
+      }
+
+      .user-profile-avatar {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Flash message styles */
+    .user-profile-flash-message {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px;
+      border-radius: 5px;
+      z-index: 1000;
+      max-width: 300px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      animation: slideIn 0.3s forwards;
+      color: white;
+      font-weight: bold;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+      }
+
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    .user-profile-flash-success {
+      background-color: rgba(16, 185, 129, 0.9);
+    }
+
+    .user-profile-flash-error {
+      background-color: rgba(239, 68, 68, 0.9);
+    }
+
+    .user-profile-flash-info {
+      background-color: rgba(14, 165, 233, 0.9);
+    }
+  </style>
+</head>
+
+<body class="user-profile-body">
+  <%- include('Partials/UserHeader') %>
+
+    <div class="user-profile-main-container">
+      <!-- Top Profile Header -->
+      <div class="user-profile-header">
+        <div class="user-profile-avatar-container">
+          <div class="user-profile-avatar">
+            <%= name.charAt(0).toUpperCase() %>
+          </div>
+        </div>
+        <div class="user-profile-info-container">
+          <div class="user-profile-info-item">
+            <span class="user-profile-info-label">Name:</span>
+            <span class="user-profile-info-value">
+              <%= name %>
+            </span>
+          </div>
+
+          <div class="user-profile-info-item">
+            <span class="user-profile-info-label">Username:</span>
+            <span class="user-profile-info-value">
+              <%= username %>
+            </span>
+          </div>
+
+          <div class="user-profile-info-item">
+            <span class="user-profile-info-label">shopname:</span>
+            <span class="user-profile-info-value">
+              <%= shopname %>
+            </span>
+          </div>
+
+
+          <div class="user-profile-commission-container">
+            <div class="user-profile-commission-item">
+              <span class="user-profile-info-label">Commission:</span>
+              <input type="number" class="user-profile-commission-input" id="compact-commission"
+                value="<%= userCommission %>" min="1" max="100">
+              <span>%</span>
+              <button class="user-profile-commission-button" id="compact-commission-button">Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forms Container -->
+      <div class="user-profile-forms-container">
+        <!-- Left Column -->
+        <div class="user-profile-form-column">
+          <!-- Update Name Form -->
+          <form class="user-profile-form" id="nameForm">
+            <h3 class="user-profile-form-title">Update Name</h3>
+            <div class="user-profile-form-group">
+              <label class="user-profile-label" for="user-profile-name">Name</label>
+              <input class="user-profile-input" type="text" id="user-profile-name" value="<%= name %>"
+                placeholder="Enter your name" required />
+            </div>
+            <button type="submit" class="user-profile-button" id="name-submit" disabled>Save Name</button>
+          </form>
+
+          <!-- Update Username Form -->
+          <form class="user-profile-form" id="usernameForm">
+            <h3 class="user-profile-form-title">Update Username</h3>
+            <div class="user-profile-form-group">
+              <label class="user-profile-label" for="user-profile-username">Username</label>
+              <input class="user-profile-input" type="text" id="user-profile-username" value="<%= username %>"
+                placeholder="Enter username" required />
+            </div>
+            <button type="submit" class="user-profile-button" id="username-submit" disabled>Save Username</button>
+          </form>
+        </div>
+
+        <!-- Right Column -->
+        <div class="user-profile-form-column">
+          <!-- Update Password Form -->
+          <form class="user-profile-form" id="passwordForm">
+            <h3 class="user-profile-form-title">Change Password</h3>
+            <div class="user-profile-form-group">
+              <label class="user-profile-label" for="user-profile-current-password">Current Password</label>
+              <div class="user-profile-password-container">
+                <input class="user-profile-input" type="password" id="user-profile-current-password"
+                  placeholder="Enter current password" required />
+                <button type="button" class="user-profile-toggle-password"
+                  onclick="userProfileTogglePassword('user-profile-current-password')">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <div class="user-profile-form-group">
+              <label class="user-profile-label" for="user-profile-new-password">New Password</label>
+              <div class="user-profile-password-container">
+                <input class="user-profile-input" type="password" id="user-profile-new-password"
+                  placeholder="Enter new password" required />
+                <button type="button" class="user-profile-toggle-password"
+                  onclick="userProfileTogglePassword('user-profile-new-password')">
+                  👁️
+                </button>
+              </div>
+              <div class="user-profile-strength-meter">
+                <div class="user-profile-strength-meter-fill" id="password-strength-meter"></div>
+              </div>
+            </div>
+
+            <div class="user-profile-form-group">
+              <label class="user-profile-label" for="user-profile-confirm-password">Confirm Password</label>
+              <div class="user-profile-password-container">
+                <input class="user-profile-input" type="password" id="user-profile-confirm-password"
+                  placeholder="Confirm new password" required />
+                <button type="button" class="user-profile-toggle-password"
+                  onclick="userProfileTogglePassword('user-profile-confirm-password')">
+                  👁️
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="user-profile-button" id="password-submit">Change Password</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Utility Functions
+      function showFlashMessage(type, message) {
+        const flashDiv = document.createElement('div');
+        flashDiv.className = `user-profile-flash-message user-profile-flash-${type}`;
+        flashDiv.textContent = message;
+        document.body.appendChild(flashDiv);
+
+        setTimeout(() => {
+          flashDiv.style.opacity = '0';
+          setTimeout(() => flashDiv.remove(), 300);
+        }, 3000);
+      }
+
+      function userProfileTogglePassword(id) {
+        const input = document.getElementById(id);
+        if (input) {
+          input.type = input.type === 'password' ? 'text' : 'password';
+        }
+      }
+
+      function validateUsername(username) {
+        return /^[a-zA-Z0-9]{8,}$/.test(username);
+      }
+
+      function validateName(name) {
+        return /^[a-zA-Z0-9\s]{2,}$/.test(name);
+      }
+
+      function validatePassword(password) {
+        return password.length >= 8 &&
+          /[A-Z]/.test(password) &&
+          /[a-z]/.test(password) &&
+          /[0-9]/.test(password);
+      }
+
+      // Compact commission update
+      document.getElementById('compact-commission-button').addEventListener('click', async () => {
+        const button = document.getElementById('compact-commission-button');
+        const input = document.getElementById('compact-commission');
+        const commission = input.value;
+
+        button.disabled = true;
+        button.textContent = 'Updating...';
+
+        try {
+          const response = await fetch('/commission', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ commission })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showFlashMessage('success', 'Commission updated successfully!');
+            input.classList.add('valid');
+            setTimeout(() => input.classList.remove('valid'), 2000);
+          } else {
+            showFlashMessage('error', result.error || 'Failed to update commission');
+            input.classList.add('invalid');
+          }
+        } catch (error) {
+          showFlashMessage('error', 'Network error. Please try again.');
+          input.classList.add('invalid');
+        } finally {
+          button.disabled = false;
+          button.textContent = 'Update';
+        }
+      });
+
+      // Form Submission Handlers
+      document.getElementById('nameForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('name-submit');
+        const nameInput = document.getElementById('user-profile-name');
+        const name = nameInput.value.trim();
+
+        if (!validateName(name)) {
+          showFlashMessage('error', 'Name must be at least 2 characters and contain no special characters');
+          nameInput.classList.add('invalid');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving...';
+
+        try {
+          const response = await fetch('/name', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showFlashMessage('success', result.message || 'Name updated successfully!');
+            document.querySelectorAll('.user-profile-info-value')[0].textContent = result.newName;
+            nameInput.value = result.newName;
+            nameInput.classList.add('valid');
+          } else {
+            showFlashMessage('error', result.error || 'Failed to update name');
+            nameInput.classList.add('invalid');
+          }
+        } catch (error) {
+          showFlashMessage('error', 'Network error. Please try again.');
+          nameInput.classList.add('invalid');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Save Name';
+        }
+      });
+
+      document.getElementById('usernameForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('username-submit');
+        const usernameInput = document.getElementById('user-profile-username');
+        const username = usernameInput.value.trim();
+
+        if (!validateUsername(username)) {
+          showFlashMessage('error', 'Username must be at least 8 characters and contain no special characters');
+          usernameInput.classList.add('invalid');
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Saving...';
+
+        try {
+          const response = await fetch('/username', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            if (result.message === 'This is already your current username') {
+              showFlashMessage('info', result.message);
+            } else {
+              showFlashMessage('success', result.message || 'Username updated successfully!');
+              document.querySelectorAll('.user-profile-info-value')[1].textContent = `@${result.newUsername}`;
+              usernameInput.value = result.newUsername;
+              usernameInput.classList.add('valid');
+            }
+          } else {
+            showFlashMessage('error', result.error || 'Failed to update username');
+            usernameInput.classList.add('invalid');
+          }
+        } catch (error) {
+          showFlashMessage('error', 'Network error. Please try again.');
+          usernameInput.classList.add('invalid');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Save Username';
+        }
+      });
+
+      document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = document.getElementById('password-submit');
+        const currentPassword = document.getElementById('user-profile-current-password').value;
+        const newPassword = document.getElementById('user-profile-new-password').value;
+        const confirmPassword = document.getElementById('user-profile-confirm-password').value;
+
+        let isValid = true;
+
+        if (!currentPassword) {
+          document.getElementById('user-profile-current-password').classList.add('invalid');
+          isValid = false;
+        }
+
+        if (!newPassword || !validatePassword(newPassword)) {
+          document.getElementById('user-profile-new-password').classList.add('invalid');
+          isValid = false;
+        }
+
+        if (!confirmPassword || newPassword !== confirmPassword) {
+          document.getElementById('user-profile-confirm-password').classList.add('invalid');
+          isValid = false;
+        }
+
+        if (!isValid) {
+          showFlashMessage('error', 'Password must be at least 8 characters with 1 uppercase, 1 lowercase, and 1 number');
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Change Password';
+          return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Updating...';
+
+        try {
+          const response = await fetch('/password', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              currentPassword,
+              newPassword,
+              confirmPassword
+            }),
+            credentials: 'include'
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            showFlashMessage('success', result.message || 'Password updated successfully!');
+            document.getElementById('passwordForm').reset();
+            document.getElementById('password-strength-meter').className = 'user-profile-strength-meter-fill';
+
+            ['current-password', 'new-password', 'confirm-password'].forEach(id => {
+              document.getElementById(`user-profile-${id}`).classList.remove('invalid');
+            });
+          } else {
+            showFlashMessage('error', result.error || 'Failed to update password');
+
+            if (result.error.toLowerCase().includes('current password')) {
+              document.getElementById('user-profile-current-password').classList.add('invalid');
+            } else {
+              document.getElementById('user-profile-new-password').classList.add('invalid');
+              document.getElementById('user-profile-confirm-password').classList.add('invalid');
+            }
+          }
+        } catch (error) {
+          showFlashMessage('error', 'Network error. Please try again.');
+          document.getElementById('user-profile-new-password').classList.add('invalid');
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Change Password';
+        }
+      });
+
+      // Real-time validation
+      document.getElementById('user-profile-name').addEventListener('input', function () {
+        const isValid = validateName(this.value);
+        this.classList.remove('valid', 'invalid');
+        if (this.value) {
+          this.classList.add(isValid ? 'valid' : 'invalid');
+        }
+        document.getElementById('name-submit').disabled = !isValid;
+      });
+
+      document.getElementById('user-profile-username').addEventListener('input', function () {
+        const isValid = validateUsername(this.value);
+        this.classList.remove('valid', 'invalid');
+        if (this.value) {
+          this.classList.add(isValid ? 'valid' : 'invalid');
+        }
+        document.getElementById('username-submit').disabled = !isValid;
+      });
+
+      document.getElementById('user-profile-new-password').addEventListener('input', function () {
+        const password = this.value;
+        const isValid = validatePassword(password);
+        this.classList.remove('valid', 'invalid');
+        if (this.value) {
+          this.classList.add(isValid ? 'valid' : 'invalid');
+        }
+
+        const meter = document.getElementById('password-strength-meter');
+        let strength = 0;
+        if (password.length >= 8) strength += 1;
+        if (/[A-Z]/.test(password)) strength += 1;
+        if (/[a-z]/.test(password)) strength += 1;
+        if (/[0-9]/.test(password)) strength += 1;
+
+        meter.className = 'user-profile-strength-meter-fill';
+        if (strength > 0) {
+          meter.classList.add(`strength-${Math.min(strength, 4)}`);
+        }
+      });
+
+      document.getElementById('user-profile-confirm-password').addEventListener('input', function () {
+        const newPassword = document.getElementById('user-profile-new-password').value;
+        const isValid = this.value === newPassword;
+        this.classList.remove('valid', 'invalid');
+        if (this.value) {
+          this.classList.add(isValid ? 'valid' : 'invalid');
+        }
+      });
+
+      // Initialize validation on page load
+      document.addEventListener('DOMContentLoaded', function () {
+        const nameInput = document.getElementById('user-profile-name');
+        if (nameInput.value) {
+          nameInput.classList.add(validateName(nameInput.value) ? 'valid' : 'invalid');
+        }
+
+        const usernameInput = document.getElementById('user-profile-username');
+        if (usernameInput.value) {
+          usernameInput.classList.add(validateUsername(usernameInput.value) ? 'valid' : 'invalid');
+        }
+
+        const existingMessages = document.querySelectorAll('.user-profile-flash-message');
+        existingMessages.forEach(msg => msg.remove());
+      });
+    </script>
+</body>
+
+</html>

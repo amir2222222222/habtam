@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="icon" type="image/png" sizes="32x32" href="/bingo-logo.png">
+<head>
+    <meta charset="UTF-8" />
+    <title>Bingo Controls</title>
+    <style>
+        .bingo-controls-reset {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .bingo-controls-html,
+        .bingo-controls-body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        .bingo-controls-body {
+            display: grid;
+            grid-template-rows: auto 1fr;
+            grid-template-columns: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .bingo-controls-main-content {
+
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            padding: 20px;
+            background-color: var(--bg-color);
+        }
+
+        .bingo-controls-container {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 900px;
+            background-color: var(--card-color);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .bingo-controls-column {
+            flex: 1 1 50%;
+            padding: 20px;
+        }
+
+        .bingo-controls-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: var(--text-color);
+            font-size: 1.4rem;
+        }
+
+        .bingo-controls-label {
+            display: block;
+            margin: 15px 0 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .bingo-controls-input,
+        .bingo-controls-select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            color: var(--input-text);
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .bingo-controls-input:focus,
+        .bingo-controls-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Hide spinner buttons */
+        .bingo-controls-input[type=number]::-webkit-outer-spin-button,
+        .bingo-controls-input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .bingo-controls-button {
+            position: relative;
+            margin-top: 15px;
+            z-index: 0;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            background: none;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .bingo-controls-button::before,
+        .bingo-controls-button::after {
+            content: "";
+            position: absolute;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+
+        .bingo-controls-button::before {
+            inset: 0;
+            background-color: var(--border-color);
+            z-index: -2;
+        }
+
+        .bingo-controls-button::after {
+            inset: 2px;
+            background-color: var(--button-color);
+            z-index: -1;
+        }
+
+        .bingo-controls-button:hover:not(:disabled)::after {
+            inset: 0;
+            background-color: var(--secondary-color);
+        }
+
+        .bingo-controls-button:hover:not(:disabled)::before {
+            box-shadow: 0 0 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .bingo-controls-button:active:not(:disabled) {
+            transform: translateY(1px);
+        }
+
+        .bingo-controls-button:disabled {
+            cursor: default;
+            opacity: 0.6;
+        }
+
+        .bingo-controls-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bingo-controls-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            color: var(--text-color);
+            user-select: none;
+        }
+
+        .bingo-controls-checkbox {
+            appearance: none;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .bingo-controls-checkbox:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .bingo-controls-checkbox::after {
+            content: '';
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            opacity: 0;
+            transition: opacity 0.1s ease;
+        }
+
+        .bingo-controls-checkbox:checked::after {
+            opacity: 1;
+        }
+
+        .bingo-controls-checkbox:focus-visible {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        .bingo-controls-pattern-layout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .bingo-controls-pattern-display {
+            width: 200px;
+            height: 200px;
+            background-color: rgba(0, 74, 124, 0.1);
+            border: 2px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .bingo-controls-pattern-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .bingo-controls-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(6px);
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+
+        .bingo-controls-loading-box {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-size: 1.1rem;
+            min-width: 300px;
+            border: 1px solid var(--border-color);
+        }
+
+        .bingo-controls-alert {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            z-index: 11000;
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .bingo-controls-alert.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bingo-controls-alert-success {
+            background-color: var(--success-color);
+        }
+
+        .bingo-controls-alert-error {
+            background-color: var(--danger-color);
+        }
+
+        .bingo-controls-prompt {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: 200px;
+            max-width: 80vw;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background-color: var(--text-color);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 9999;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .bingo-controls-prompt.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bingo-controls-prompt-success {
+            background-color: var(--success-color);
+        }
+
+        .bingo-controls-prompt-error {
+            background-color: var(--danger-color);
+        }
+
+        @media (max-width: 768px) {
+            .bingo-controls-container {
+                flex-direction: column;
+            }
+
+            .bingo-controls-column {
+                flex: 1 1 100%;
+                padding: 15px;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .bingo-controls-column:last-child {
+                border-bottom: none;
+            }
+
+            .bingo-controls-pattern-layout {
+                flex-direction: column;
+                align-items: center;
+                gap: 20px;
+            }
+
+            .bingo-controls-pattern-display {
+                width: 150px;
+                height: 150px;
+            }
+
+            .bingo-controls-title {
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            .bingo-controls-button {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="bingo-controls-body">
+    <%- include('Partials/UserHeader') -%>
+
+        <div class="bingo-controls-main-content">
+            <div class="bingo-controls-container">
+                <!-- Speed Form -->
+                <div class="bingo-controls-column">
+                    <h2 class="bingo-controls-title">Speed</h2>
+                    <form action="/save-speed" method="POST">
+                        <label class="bingo-controls-label" for="bingo-controls-speed">Speed (1-5)</label>
+                        <input class="bingo-controls-input" type="number" id="bingo-controls-speed" name="speed" min="1"
+                            max="10" value="<%= GameSpeed %>" required>
+                        <button type="submit" class="bingo-controls-button">Save Speed</button>
+                    </form>
+                </div>
+
+                <!-- Voice Form -->
+                <div class="bingo-controls-column">
+                    <h2 class="bingo-controls-title">Voice</h2>
+                    <form id="bingo-controls-voice-form" action="/save-voice" method="POST">
+                        <label class="bingo-controls-label" for="bingo-controls-voice">Voice Type</label>
+                        <select class="bingo-controls-select" id="bingo-controls-voice" name="voice" required>
+                            <% voiceOptions.forEach(function(voice) { %>
+                                <option value="<%= voice %>" <%=voice===selectedVoice ? 'selected' : '' %>>
+                                    <%= voice.charAt(0).toUpperCase() + voice.slice(1) %>
+                                </option>
+                                <% }); %>
+                        </select>
+                        <button type="submit" class="bingo-controls-button">Save Voice</button>
+                    </form>
+                </div>
+
+                <!-- Patterns Form -->
+                <div class="bingo-controls-column">
+                    <h2 class="bingo-controls-title">Patterns</h2>
+                    <form action="/save-patterns" method="POST">
+                        <div class="bingo-controls-pattern-layout">
+                            <div class="bingo-controls-pattern-display">
+                                <img id="bingo-controls-pattern-img" class="bingo-controls-pattern-image"
+                                    src="/patters/any-vertical.png" alt="Pattern Preview" style="display: block;" />
+                            </div>
+                            <div class="bingo-controls-checkbox-group">
+                                <% Object.entries(patternLabels).forEach(([value, label])=> { %>
+                                    <label class="bingo-controls-checkbox-label">
+                                        <input class="bingo-controls-checkbox" type="checkbox" name="pattern"
+                                            value="<%= value %>" <%=checkedPatterns.includes(value) ? 'checked' : '' %>
+                                        onmouseover="bingoControlsShowImage('<%= value %>')"
+                                            onmouseout="bingoControlsHideImage()" />
+                                            <%= label %>
+                                    </label>
+                                    <% }); %>
+                            </div>
+                        </div>
+                        <button type="submit" class="bingo-controls-button">Save Patterns</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading overlay -->
+        <div class="bingo-controls-loading-overlay" id="bingo-controls-loading-overlay">
+            <div class="bingo-controls-loading-box">
+                <p id="bingo-controls-progress-text">Downloading voices... 0/80</p>
+            </div>
+        </div>
+
+        <!-- Alert messages -->
+        <div id="bingo-controls-alert-success" class="bingo-controls-alert bingo-controls-alert-success"></div>
+        <div id="bingo-controls-alert-error" class="bingo-controls-alert bingo-controls-alert-error"></div>
+
+        <!-- Prompt message -->
+        <div id="bingo-controls-prompt" class="bingo-controls-prompt"></div>
+
+        <script>
+            const bingoControlsPatternImages = {
+                h: '/patters/any-horizontal.png',
+                v: '/patters/any-vertical.png',
+                d: '/patters/any-cross.png',
+                sc: '/patters/4-single-middle.png',
+                lc: '/patters/4-single-corner.png'
+            };
+
+            const bingoControlsPatternImg = document.getElementById('bingo-controls-pattern-img');
+
+            function bingoControlsShowImage(patternKey) {
+                if (bingoControlsPatternImages[patternKey]) {
+                    bingoControlsPatternImg.src = bingoControlsPatternImages[patternKey];
+                    bingoControlsPatternImg.style.display = 'block';
+                } else {
+                    bingoControlsPatternImg.style.display = 'none';
+                }
+            }
+
+            function bingoControlsHideImage() {
+                bingoControlsPatternImg.style.display = 'none';
+            }
+
+            function bingoControlsOpenVoiceDB() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open("VoiceDB", 1);
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains("voices")) {
+                            db.createObjectStore("voices", { keyPath: "id" });
+                        }
+                    };
+
+                    request.onsuccess = (event) => resolve(event.target.result);
+                    request.onerror = (event) => reject(event.target.error);
+                });
+            }
+
+            async function bingoControlsCheckVoiceInDB(voice) {
+                try {
+                    const db = await bingoControlsOpenVoiceDB();
+                    return new Promise((resolve) => {
+                        const tx = db.transaction("voices", "readonly");
+                        const store = tx.objectStore("voices");
+                        const getRequest = store.get(`${voice}_1`);
+                        getRequest.onsuccess = () => resolve(!!getRequest.result);
+                        getRequest.onerror = () => resolve(false);
+                    });
+                } catch {
+                    return false;
+                }
+            }
+
+            async function bingoControlsSaveVoiceToIndexedDB(voice, index, blob) {
+                try {
+                    const db = await bingoControlsOpenVoiceDB();
+                    return new Promise((resolve) => {
+                        const tx = db.transaction("voices", "readwrite");
+                        const store = tx.objectStore("voices");
+                        const putRequest = store.put({ id: `${voice}_${index}`, voice, index, blob });
+                        putRequest.onsuccess = () => resolve();
+                        putRequest.onerror = () => resolve();
+                    });
+                } catch {
+                    // ignore silently
+                }
+            }
+
+            function bingoControlsShowPrompt(type, message) {
+                const promptEl = document.getElementById('bingo-controls-prompt');
+                promptEl.textContent = message;
+                promptEl.className = 'bingo-controls-prompt'; // reset classes
+                promptEl.classList.add(type === 'error' ? 'bingo-controls-prompt-error' : 'bingo-controls-prompt-success', 'show');
+
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    promptEl.classList.remove('show');
+                }, 3000);
+            }
+
+            async function bingoControlsDownloadVoiceFile(voice, index) {
+                try {
+                    const response = await fetch(`/mp3/${voice}/${voice}${index}.mp3`);
+                    if (!response.ok) {
+                        return false;
+                    }
+                    const blob = await response.blob();
+                    await bingoControlsSaveVoiceToIndexedDB(voice, index, blob);
+                    return true;
+                } catch {
+                    return false;
+                }
+            }
+
+            async function bingoControlsDownloadAllVoices(voice) {
+                const overlay = document.getElementById('bingo-controls-loading-overlay');
+                const progressText = document.getElementById('bingo-controls-progress-text');
+
+                overlay.style.display = 'flex';
+
+                for (let i = 1; i <= 80; i++) {
+                    progressText.textContent = `Downloading voices... ${i}/80`;
+                    await bingoControlsDownloadVoiceFile(voice, i);
+                }
+
+                overlay.style.display = 'none';
+                bingoControlsShowPrompt('success', `Voice pack "${voice}" downloaded.`);
+            }
+
+            document.getElementById('bingo-controls-voice-form').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const voice = document.getElementById('bingo-controls-voice').value.trim();
+                if (!voice) return;
+
+                try {
+                    const exists = await bingoControlsCheckVoiceInDB(voice);
+
+                    if (!exists) {
+                        await bingoControlsDownloadAllVoices(voice);
+                    } else {
+                        bingoControlsShowPrompt('success', `"${voice}" voice is already downloaded.`);
+                    }
+
+                    e.target.submit();
+                } catch (err) {
+                    console.error(err);
+                    bingoControlsShowPrompt('error', 'An error occurred while saving voice.');
+                }
+            });
+        </script>
+</body>
+
+</html>

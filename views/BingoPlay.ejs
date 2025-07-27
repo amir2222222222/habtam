@@ -388,8 +388,8 @@
     .info-display .winner,
     .info-display .betbirr {
       position: relative;
-      font-size: 3.5rem;
-      font-weight: 800;
+      font-size: 4rem;
+      font-weight: 900;
       color: #2c3e50;
       text-align: center;
       line-height: 1.2;
@@ -441,7 +441,7 @@
 
     .info-display .betbirr::after {
       content: "ብር";
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-left: 6px;
       color: #16a085;
       font-weight: 600;
@@ -450,7 +450,7 @@
 
     .info-display .winner::after {
       content: "ብር";
-      font-size: 2rem;
+      font-size: 2.5rem;
       margin-left: 6px;
       color: #e67e22;
       text-shadow: none;
@@ -459,29 +459,29 @@
     /* Animations */
     @keyframes pulse-gold {
       0% {
-        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0.4);
+        box-shadow: 0 0 0 0 rgba(19, 15, 241, 0.4);
       }
 
       70% {
-        box-shadow: 0 0 0 15px rgba(241, 196, 15, 0);
+        box-shadow: 0 0 0 15px rgba(241, 207, 15, 0.4);
       }
 
       100% {
-        box-shadow: 0 0 0 0 rgba(241, 196, 15, 0);
+        box-shadow: 0 0 0 0 rgba(241, 15, 15, 0.1);
       }
     }
 
     @keyframes pulse-green {
       0% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+        box-shadow: 0 0 0 0 rgba(204, 46, 46, 0.4);
       }
 
       70% {
-        box-shadow: 0 0 0 15px rgba(46, 204, 113, 0);
+        box-shadow: 0 0 0 15px rgba(227, 220, 20, 0);
       }
 
       100% {
-        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+        box-shadow: 0 0 0 0 rgba(39, 19, 220, 0);
       }
     }
 
@@ -769,7 +769,7 @@
         <h1 class="winner">ደራሽ &nbsp <%= winningamount %>
         </h1>
       </div>
-      <div class="logo-area"></div>
+      <div class="logo-area">H.B</div>
       <div class="called-numbers">
         <span class="callednumbers">--</span>
         <div class="small">ድምር ጥሪ</div> <!-- ✅ FIXED -->
@@ -985,6 +985,7 @@
           request.onerror = () => reject();
         });
       }
+
       // Game State Variables
       let gameStarted = false;
       let isPaused = false;
@@ -1193,81 +1194,60 @@
       function resetGame() {
         window.location.href = "/home";
       }
+  // Main shuffle function
+  function shuffleGame() {
+    if (shuffleUsed || gameStarted) return;
+    shuffleUsed = true;
+    startShuffleEffect(); // Start visual effect immediately
+    playShuffleSound();   // Play sound independently
+    setGameState();
+  }
 
-  // Main shuffle function (preserved structure)
-    function shuffleGame() {
-      if (shuffleUsed || gameStarted) return;
-      playShuffleSound(); // Voice 79 playback
-      shuffleUsed = true;
-      setGameState();
-    }
+  // Shuffle sound playback
+  function playShuffleSound() {
+    const req = indexedDB.open("VoiceDB");
+    req.onsuccess = (e) => {
+      const db = e.target.result;
+      const tx = db.transaction("voices");
+      const store = tx.objectStore("voices");
+      const getReq = store.get(`${voiceType}_79`);
 
-    // Shuffle sound playback with synchronized visual effect
-    function playShuffleSound() {
-      let started = false;
-      const startEffectOnce = () => {
-        if (!started) {
-          started = true;
-          startShuffleEffect();
+      getReq.onsuccess = (ev) => {
+        const blob = ev.target.result?.blob;
+        if (blob) {
+          const audio = new Audio(URL.createObjectURL(blob));
+          audio.play().catch(() => { }); // Optional: handle play error
         }
       };
+    };
+  }
 
-      try {
-        const req = indexedDB.open("VoiceDB");
-        req.onsuccess = function (e) {
-          const db = e.target.result;
-          const tx = db.transaction("voices");
-          const store = tx.objectStore("voices");
-          const getReq = store.get(`${voiceType}_79`);
-          getReq.onsuccess = function (ev) {
-            const blob = ev.target.result?.blob;
-            if (blob) {
-              const audio = new Audio(URL.createObjectURL(blob));
-              audio.oncanplaythrough = function () {
-                audio.play().then(startEffectOnce).catch(startEffectOnce);
-              };
-              // Fallback: if audio fails to load in 1 second, start effect anyway
-              setTimeout(startEffectOnce, 1000);
-            } else {
-              // Voice not found, start effect immediately
-              startEffectOnce();
-            }
-          };
-          getReq.onerror = startEffectOnce;
-        };
-        req.onerror = startEffectOnce;
-      } catch {
-        // IndexedDB error, just start effect
-        startEffectOnce();
-      }
-    }
+  // Visual shuffle effect
+  function startShuffleEffect() {
+    const cells = document.querySelectorAll(".bingo-cell");
+    const originalContents = Array.from(cells, cell => cell.textContent);
 
-    // Visual shuffle effect (optimized) - text only version
-    function startShuffleEffect() {
-      const cells = document.querySelectorAll(".bingo-cell");
-      const originalContents = Array.from(cells).map(cell => cell.textContent);
+    cells.forEach(cell => cell.style.transition = "none");
 
-      cells.forEach(cell => cell.style.transition = "none");
+    let counter = 0;
+    const shuffleInterval = setInterval(() => {
+      cells.forEach(cell => {
+        cell.textContent = Math.floor(Math.random() * 75) + 1;
+      });
 
-      let counter = 0;
-      const shuffleInterval = setInterval(() => {
-        cells.forEach(cell => {
-          const randomNumber = Math.floor(Math.random() * 75) + 1;
-          cell.textContent = randomNumber;
+      counter += 200;
+      if (counter >= 3200) {
+        clearInterval(shuffleInterval);
+        cells.forEach((cell, i) => {
+          cell.textContent = originalContents[i];
         });
+        initBingoGrid();
+        updateButtons();
+        setGameState(false, false);
+      }
+    }, 150);
+  }
 
-        counter += 100;
-        if (counter >= 2300) {
-          clearInterval(shuffleInterval);
-          cells.forEach((cell, i) => {
-            cell.textContent = originalContents[i];
-          });
-          initBingoGrid();
-          updateButtons();
-          setGameState(false, false);
-        }
-      }, 100);
-    }
       // Cartela Management Functions
       function handleLockCartela() {
 

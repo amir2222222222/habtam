@@ -19,7 +19,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.set('view cache', false);
 
 // Database Connection Middleware
 app.use(async (req, res, next) => {
@@ -53,19 +52,19 @@ app.get('/pingping', (req, res) => {
 
 // Route imports
 const routes = [
-  './Routes/Auth',
-  './Routes/Home',
-  './Routes/Header',
-  './Routes/Setting',
-  './Routes/BingoPlay',
-  './Routes/Status',
-  './Routes/Games',
-  './Routes/Profile',
-  './Routes/AccountDelete',
-  './Routes/AccountList',
-  './Routes/AccountSignUp',
-  './Routes/AccountUpdate',
-  './Routes/SubAdminTransaction',
+  './routes/Auth',
+  './routes/Home',
+  './routes/Header',
+  './routes/Setting',
+  './routes/BingoPlay',
+  './routes/Status',
+  './routes/Games',
+  './routes/Profile',
+  './routes/AccountDelete',
+  './routes/AccountList',
+  './routes/AccountSignUp',
+  './routes/AccountUpdate',
+  './routes/SubAdminTransaction',
 ];
 
 // Register all routes

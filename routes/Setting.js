@@ -4,13 +4,23 @@ const fs = require('fs');
 const path = require('path');
 const asyncHandler = require("../utils/AsyncHandler");
 const { user } = require("../middleware/AuthMiddleware");
+
 // Constants
 const VOICE_FOLDER = path.join(__dirname, '..', 'public', 'mp3');
 const defaultPatterns = ['h', 'v', 'd', 'sc', 'lc'];
 const defaultVoiceType = 'Recommended_Black_Male_Voice';
 const defaultGameSpeed = 5;
 
-// Helpers
+// Cookie options
+const cookieOpts = {
+  httpOnly: true,
+  sameSite: "lax",
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+};
+
+// Helper to list available voices
 function getVoiceOptions() {
   try {
     return fs.readdirSync(VOICE_FOLDER).filter(file =>
@@ -47,26 +57,14 @@ router.get('/setting', user, asyncHandler(async (req, res) => {
 // POST /save-speed
 router.post('/save-speed', user, asyncHandler(async (req, res) => {
   const newSpeed = req.body.speed || defaultGameSpeed;
-
-  res.cookie('Speed', newSpeed, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  });
-
+  res.cookie('Speed', newSpeed, cookieOpts);
   res.redirect('/setting');
 }));
 
 // POST /save-voice
 router.post('/save-voice', user, asyncHandler(async (req, res) => {
   const newVoice = req.body.voice || defaultVoiceType;
-
-  res.cookie('Voice', newVoice, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  });
-
+  res.cookie('Voice', newVoice, cookieOpts);
   res.redirect('/setting');
 }));
 
@@ -79,17 +77,8 @@ router.post('/save-patterns', user, asyncHandler(async (req, res) => {
       : [inputPattern]
     : defaultPatterns;
 
-  res.cookie('Patterns', JSON.stringify(newPatterns), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  });
-
+  res.cookie('Patterns', JSON.stringify(newPatterns), cookieOpts);
   res.redirect('/setting');
 }));
 
-module.exports = router;                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                             
-                                                                                                                               
-                                                                                                                     
-                                                                                                                                                                                           
+module.exports = router;

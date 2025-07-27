@@ -74,7 +74,7 @@ router.get('/subadmin/status', subadmin, asyncHandler(async (req, res) => {
     };
 
     // 5. Render the view with additional context
-    res.render('SubAdmin_Panal/subadminstatus', {
+    res.render('SubAdmin_Panal/SubAdminStatus', {
       title: 'Subadmin Dashboard',
       user: formattedUser,
       currentPage: 'status',

@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 const { User } = require('../models/User');
@@ -6,11 +7,11 @@ const { generateToken, verifyToken } = require("../utils/Jwt");
 const asyncHandler = require("../utils/AsyncHandler");
 const { getTodayDate } = require('../utils/Time');
 
+// Cookie 
 const cookieOpts = {
   httpOnly: true,
   sameSite: "lax",
   secure: process.env.NODE_ENV === "production",
-  maxAge: 1000 * 60 * 60 * 24 * 7,
   path: "/",
 };
 
@@ -56,13 +57,17 @@ router.get("/bingo_play", user, asyncHandler(async (req, res) => {
 router.post('/start-game', user, asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return;
 
     const token = verifyToken(req.cookies.token);
-    const requiredBalance = parseFloat(token.requiredbalance) || 0;
+    const requiredBalance = parseFloat(token.requiredbalance);
+
+    
+  if (!user || !token || !requiredBalance) {
+  return res.redirect("/home");
+}
 
   if (user.balance < requiredBalance) {
-  return res.redirect("/home"); // 👈 Redirects user to /home instead of sending JSON
+  return res.redirect("/home");
 }
 
 
@@ -91,7 +96,7 @@ router.post('/start-game', user, asyncHandler(async (req, res) => {
     } catch {
       // Skip saving game on failure, don't crash
     }
-
+console.log({newGame})
     const payload = { index: newGame.index };
     const finalToken = generateToken(payload);
 

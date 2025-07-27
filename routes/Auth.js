@@ -3,18 +3,24 @@ const router = express.Router();
 const { User, Admin, SubAdmin } = require('../models/User');
 const { generateToken, verifyToken } = require("../utils/Jwt");
 const asyncHandler = require("../utils/AsyncHandler");
-const { auth } = require("../middleware/AuthMiddleware");
 const path = require("path");
 const fs = require("fs").promises;
 const { comparePassword } = require("../utils/Bcrypt");
 
-// Cookie settings
+// Cookie Auth
 const cookieOpts = {
   httpOnly: true,
   sameSite: "lax",
   secure: process.env.NODE_ENV === "production",
   path: "/",
-  maxAge: 30 * 24 * 60 * 60 * 1000,
+};
+
+const cookieOppts = {
+  httpOnly: true, // Prevent XSS
+  secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+  sameSite: 'lax', // CSRF protection
+  maxAge: 7 * 24 * 60 * 60 * 1000 * 100,// 7 days
+  path: "/",
 };
 
 async function getCartelas() {
@@ -94,10 +100,10 @@ router.post("/login", asyncHandler(async (req, res) => {
       requiredbalance: 0,
     });
 
-    res.cookie("token", token);
-    res.cookie("Voice", "Recommended_Black_Male_Voice", cookieOpts);
-    res.cookie("Speed", "5", cookieOpts);
-    res.cookie("Patterns", JSON.stringify(["h", "v", "d", "sc", "lc"]), cookieOpts);
+    res.cookie("token", token ,cookieOpts);
+    res.cookie("Voice", "Recommended_Black_Male_Voice", cookieOppts);
+    res.cookie("Speed", "5", cookieOppts);
+    res.cookie("Patterns", JSON.stringify(["h", "v", "d", "sc", "lc"]), cookieOppts);
 
     return res.status(200).json({
       message: "Login successful",
@@ -113,7 +119,7 @@ router.post("/login", asyncHandler(async (req, res) => {
       role: admin.role
     });
 
-    res.cookie("token", token);
+    res.cookie("token", token ,cookieOpts);
     return res.status(200).json({
       message: "Admin login successful",
       redirect: "/SignUp/admin"
@@ -128,7 +134,7 @@ router.post("/login", asyncHandler(async (req, res) => {
       role: subadmin.role
     });
 
-    res.cookie("token", token);
+    res.cookie("token", token ,cookieOpts);
     return res.status(200).json({
       message: "Subadmin login successful",
       redirect: "/SignUp/User"
@@ -143,7 +149,7 @@ router.post("/login", asyncHandler(async (req, res) => {
 }));
 
 router.post("/logout", (req, res) => {
-  res.clearCookie("token");
+  res.clearCookie("token", cookieOpts);
   return res.redirect("/login");
 });
 

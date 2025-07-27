@@ -35,19 +35,20 @@
     /* Login Container */
     .login-container {
       width: 100%;
-      max-width: 360px;
+      max-width: 400px;
       padding: 0 20px;
     }
 
     /* Login Box Styles */
     .login-box {
-      background-color: rgb(28, 22, 22);
-      border-radius: 30px 0 10px;
+      background-color: rgb(255, 255, 255);
+      border-radius: 12px;
       width: 100%;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
+      border: 3px solid rgba(0, 0, 0, 0.811);
     }
 
     /* Server Response Box */
@@ -61,17 +62,18 @@
       text-align: center;
       display: none;
       animation: fadeIn 0.3s ease-out;
+      margin-bottom: 20px;
     }
 
     .response-box.error {
       background-color: rgba(220, 53, 69, 0.9);
-      color: white;
+      color: rgb(0, 0, 0);
       border: 1px solid #dc3545;
     }
 
     .response-box.success {
       background-color: rgba(25, 135, 84, 0.9);
-      color: white;
+      color: rgb(0, 0, 0);
       border: 1px solid #198754;
     }
 
@@ -87,50 +89,59 @@
       }
     }
 
-    /* Phone Number Display */
-    .phone {
-      background-color: #000000;
-      border-radius: 10px;
-      padding: 5px;
-      font-size: 16px;
-      color: white;
-      margin-bottom: 20px;
-    }
-
     /* Login Box Heading */
     .login-box h1 {
       font-size: 28px;
-      color: #ffffff;
+      color: #000000;
+      margin-bottom: 25px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* Form Group */
+    .form-group {
       margin-bottom: 20px;
+      text-align: left;
     }
 
     /* Form Labels */
     label {
       display: block;
-      text-align: left;
-      margin-bottom: 6px;
-      font-weight: 600;
-      color: #ffffff;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #000000;
+      font-size: 15px;
     }
 
     /* Input Fields */
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 18px;
+      padding: 14px 16px;
+      margin-bottom: 5px;
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      font-size: 16px;
       color: #000000;
-      background-color: #fff;
+      background-color: rgba(255, 255, 255, 0.9);
+      transition: all 0.3s ease;
+      outline: none;
     }
 
-    /* Input Focus State */
-    input:focus {
-      border-color: #007bff;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    /* Input States */
+    input.default {
+      border-color: rgba(0, 0, 0, 0.3);
+      box-shadow: none;
+    }
+
+    input.valid {
+      border-color: #28a745;
+      box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+    }
+
+    input.invalid {
+      border-color: #dc3545;
+      box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
     }
 
     /* Password Toggle Wrapper */
@@ -141,81 +152,206 @@
     /* Toggle Password Button */
     #togglePassword {
       position: absolute;
-      top: 40%;
-      right: 10px;
+      top: 50%;
+      right: 12px;
       transform: translateY(-50%);
       background: none;
       border: none;
-      color: #007bff;
-      font-size: 14px;
+      color: #000000;
+      font-size: 15px;
       cursor: pointer;
-      padding: 5px;
+      font-weight: 600;
+      transition: color 0.2s;
     }
 
-    /* Checkbox Group */
+    #togglePassword:hover {
+      color: #007bff;
+    }
+
+    /* Validation Hints */
+    .validation-hint {
+      font-size: 12px;
+      color: #000000;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .validation-hint.valid {
+      color: #28a745;
+    }
+
+    .validation-hint.invalid {
+      color: #dc3545;
+    }
+
+    /* Password Requirements */
+    .password-requirements {
+      margin-top: 10px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .password-requirement {
+      font-size: 12px;
+      color: #000000;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      transition: all 0.3s;
+    }
+
+    .password-requirement.valid {
+      color: #28a745;
+    }
+
+    .password-requirement.invalid {
+      color: #dc3545;
+    }
+
+    /* Checkbox Group - Fixed and Improved */
     .checkbox-group {
       display: flex;
       align-items: center;
-      font-size: 14px;
-      margin-bottom: 20px;
-      margin-top: 10px;
-      color: white;
+      margin: 25px 0;
+      position: relative;
+      padding-left: 30px;
+      cursor: pointer;
+      user-select: none;
+      min-height: 24px;
     }
 
-    /* Checkbox Input */
+    /* Hide default checkbox */
     .checkbox-group input {
-      margin-right: 8px;
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 20px;
+      width: 20px;
+      left: 0;
+      top: 0;
+      z-index: 2;
+    }
+
+    /* Custom checkbox */
+    .checkmark {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 20px;
+      width: 20px;
+      background-color: rgb(255, 255, 255);
+      border: 2px solid rgba(0, 0, 0, 0.3);
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    /* Checkbox hover state */
+    .checkbox-group:hover .checkmark {
+      background-color: rgb(178, 173, 173);
+    }
+
+    /* Checkbox checked state */
+    .checkbox-group input:checked~.checkmark {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+
+    /* Checkmark indicator */
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border:2px solid rgb(17, 0, 255);
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* Show checkmark when checked */
+    .checkbox-group input:checked~.checkmark:after {
+      display: block;
+    }
+
+    /* Checkbox label */
+    .checkbox-group label {
+      color: #000000;
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0;
+      cursor: pointer;
+      padding-left: 10px;
     }
 
     /* Login Button */
     .login-btn {
       width: 100%;
-      background-color: #007bff;
-      color: #fff;
-      padding: 12px;
-      border: 3px solid white;
-      border-radius: 6px;
-      font-size: 20px;
+      background: linear-gradient(to right, #007bff, #0062cc);
+      color: #000000;
+      padding: 15px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 800;
       cursor: pointer;
       transition: all 0.3s;
-      font-weight: 700;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      letter-spacing: 0.5px;
     }
 
     /* Login Button States */
     .login-btn:hover {
-      background-color: #0056b3;
-      transform: translateY(-1px);
+      background: linear-gradient(to right, #0069d9, #005cbf);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     }
 
     .login-btn:active {
       transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .login-btn:disabled {
-      background-color: #6c757d;
+      background: #6c757d;
       cursor: not-allowed;
       transform: none;
       opacity: 0.7;
+      box-shadow: none;
     }
 
-    /* Input Validation States */
-    input.invalid {
-      border: 2px solid #dc3545;
-    }
-
-    input.valid {
-      border: 2px solid #198754;
+    /* Footer Text */
+    .footer-text {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid rgba(0, 0, 0, 0.1);
     }
 
     /* Media Query for Small Screens */
     @media (max-width: 575.98px) {
+      .login-box {
+        padding: 25px 20px;
+      }
+
       .login-box h1 {
         font-size: 24px;
       }
 
-      input,
+      input {
+        font-size: 15px;
+        padding: 12px 14px;
+      }
+
       .login-btn {
-        font-size: 14px;
+        font-size: 15px;
+        padding: 12px;
       }
     }
   </style>
@@ -224,24 +360,52 @@
 <body>
   <div class="login-container">
     <div class="login-box">
-      <h1>Sign in</h1>
+      <h1>Habtam Bingo</h1>
       <div id="serverResponse" class="response-box"></div>
       <form action="/login" method="POST" id="loginForm">
-        <label for="username">Username</label>
-        <input type="text" name="username" id="username" required autocomplete="username" />
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" class="default" required autocomplete="username"
+            placeholder="Enter your username" />
+          <div id="usernameHint" class="validation-hint">
+            Username must be at least 8 characters (letters and numbers only)
+          </div>
+        </div>
 
-        <label for="password">Password</label>
-        <div class="password-wrapper">
-          <input type="password" name="password" id="password" required autocomplete="current-password" />
-          <button type="button" id="togglePassword">Show</button>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="password-wrapper">
+            <input type="password" name="password" id="password" class="default" required
+              autocomplete="current-password" placeholder="Enter your password" />
+            <button type="button" id="togglePassword">Show</button>
+          </div>
+          <ul class="password-requirements">
+            <li id="lengthReq" class="password-requirement">
+              At least 8 characters
+            </li>
+            <li id="lowerReq" class="password-requirement">
+              Contains a lowercase letter
+            </li>
+            <li id="upperReq" class="password-requirement">
+              Contains an uppercase letter
+            </li>
+            <li id="numberReq" class="password-requirement">
+              Contains a number
+            </li>
+          </ul>
         </div>
 
         <div class="checkbox-group">
           <input type="checkbox" id="ageConfirm" name="ageConfirm" required />
+          <span class="checkmark"></span>
           <label for="ageConfirm">I confirm I am 18 years or older</label>
         </div>
 
-        <button type="submit" class="login-btn">Sign In</button>
+        <button type="submit" class="login-btn" disabled>Sign In</button>
+
+        <div class="footer-text">
+          Responses will appear above the form when needed
+        </div>
       </form>
     </div>
   </div>
@@ -257,6 +421,13 @@
       const submitBtn = loginForm.querySelector('button[type="submit"]');
       const serverResponse = document.getElementById('serverResponse');
       const ageConfirm = document.getElementById('ageConfirm');
+
+      // Validation elements
+      const usernameHint = document.getElementById('usernameHint');
+      const lengthReq = document.getElementById('lengthReq');
+      const lowerReq = document.getElementById('lowerReq');
+      const upperReq = document.getElementById('upperReq');
+      const numberReq = document.getElementById('numberReq');
 
       // Store original button text
       const originalBtnText = submitBtn.innerHTML;
@@ -279,8 +450,26 @@
       });
 
       // Input validation handlers
-      usernameField.addEventListener('input', validateForm);
-      passwordField.addEventListener('input', validateForm);
+      usernameField.addEventListener('input', function () {
+        if (this.value.length > 0) {
+          validateUsername();
+        } else {
+          this.className = 'default';
+          usernameHint.className = 'validation-hint';
+        }
+        validateForm();
+      });
+
+      passwordField.addEventListener('input', function () {
+        if (this.value.length > 0) {
+          validatePassword();
+        } else {
+          this.className = 'default';
+          resetPasswordRequirements();
+        }
+        validateForm();
+      });
+
       ageConfirm.addEventListener('change', validateForm);
 
       // Form submission handler
@@ -320,8 +509,10 @@
           showServerMessage(result.message || 'Login successful!', 'success');
 
           // Reset validation styles
-          usernameField.classList.remove('valid', 'invalid');
-          passwordField.classList.remove('valid', 'invalid');
+          usernameField.className = 'default';
+          passwordField.className = 'default';
+          resetPasswordRequirements();
+          usernameHint.className = 'validation-hint';
 
           // Redirect if needed
           if (result.redirect) {
@@ -338,10 +529,18 @@
         }
       });
 
+      // Reset password requirements display
+      function resetPasswordRequirements() {
+        lengthReq.className = 'password-requirement';
+        lowerReq.className = 'password-requirement';
+        upperReq.className = 'password-requirement';
+        numberReq.className = 'password-requirement';
+      }
+
       // Form validation function
       function validateForm() {
-        const isUsernameValid = validateUsername();
-        const isPasswordValid = validatePassword();
+        const isUsernameValid = usernameField.value.length === 0 ? false : validateUsername();
+        const isPasswordValid = passwordField.value.length === 0 ? false : validatePassword();
         const isAgeConfirmed = ageConfirm.checked;
 
         submitBtn.disabled = !(isUsernameValid && isPasswordValid && isAgeConfirmed);
@@ -355,8 +554,8 @@
         // Username must be at least 8 characters, no special characters allowed
         const valid = /^[a-zA-Z0-9]{8,}$/.test(username);
 
-        usernameField.classList.toggle('invalid', !valid);
-        usernameField.classList.toggle('valid', valid);
+        usernameField.className = valid ? 'valid' : 'invalid';
+        usernameHint.className = `validation-hint ${valid ? 'valid' : 'invalid'}`;
 
         return valid;
       }
@@ -364,15 +563,24 @@
       // Password validation
       function validatePassword() {
         const pwd = passwordField.value;
-        // Password must be at least 8 characters with at least 1 uppercase, 1 lowercase, and 1 number
-        const valid = pwd.length >= 8 &&
-          /[a-z]/.test(pwd) &&
-          /[A-Z]/.test(pwd) &&
-          /\d/.test(pwd) &&
-          !/[^a-zA-Z0-9]/.test(pwd); // No special characters allowed
 
-        passwordField.classList.toggle('invalid', !valid);
-        passwordField.classList.toggle('valid', valid);
+        // Check each requirement
+        const hasLength = pwd.length >= 8;
+        const hasLower = /[a-z]/.test(pwd);
+        const hasUpper = /[A-Z]/.test(pwd);
+        const hasNumber = /\d/.test(pwd);
+        const noSpecialChars = !/[^a-zA-Z0-9]/.test(pwd);
+
+        // Update requirement indicators
+        lengthReq.className = `password-requirement ${hasLength ? 'valid' : 'invalid'}`;
+        lowerReq.className = `password-requirement ${hasLower ? 'valid' : 'invalid'}`;
+        upperReq.className = `password-requirement ${hasUpper ? 'valid' : 'invalid'}`;
+        numberReq.className = `password-requirement ${hasNumber ? 'valid' : 'invalid'}`;
+
+        // Overall password validation
+        const valid = hasLength && hasLower && hasUpper && hasNumber && noSpecialChars;
+
+        passwordField.className = valid ? 'valid' : 'invalid';
 
         return valid;
       }
@@ -388,9 +596,6 @@
           serverResponse.style.display = 'none';
         }, type === 'success' ? 5000 : 8000);
       }
-
-      // Initial form validation
-      validateForm();
     });
   </script>
 </body>

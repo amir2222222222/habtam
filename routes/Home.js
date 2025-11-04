@@ -81,7 +81,7 @@ router.post(
     let winningAmount;
     let requiredbalance;
 
-    if (cartCount <= 3) {
+    if (cartCount <= 1) {
       winningAmount = totalBet;
       requiredbalance = 0;
     } else {

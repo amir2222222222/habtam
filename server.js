@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const { connectDB, isConnected } = require("./config/Db");
 
 // Initialize app
-const app = express();
+const app = 
 const server = http.createServer(app);
 
 // Middlewares
